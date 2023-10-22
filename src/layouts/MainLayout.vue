@@ -2,21 +2,26 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
 
         <q-toolbar-title>
-          Quasar App
+          DHealthTech
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>
+          <q-btn
+            no-caps
+            rounded
+            outline
+            class="btn-fixed-width full-width q-ma-sm"
+          >
+          <div> Login </div>
+            <q-avatar size="22px" class="q-ml-sm">
+              <img src="https://www.gstatic.com/images/branding/product/1x/googleg_96dp.png" />
+            </q-avatar>
+          </q-btn>
+        </div>
       </q-toolbar>
+
     </q-header>
 
     <q-drawer
