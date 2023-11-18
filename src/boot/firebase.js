@@ -1,10 +1,8 @@
-import firebase from "firebase/app";
-//import "firebase/database";
-import "firebase/auth";
-//import "firebase/functions";
-//import "firebase/storage";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
+import { getDatabase, ref, set, onValue, child, get, update, off, remove } from "firebase/database";
 
-let firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyD47b-elpkJaDeHvs0lIFZ0sruGEukMmHM",
   authDomain: "dhealthtech.firebaseapp.com",
   databaseURL: "https://dhealthtech-default-rtdb.firebaseio.com",
@@ -15,11 +13,32 @@ let firebaseConfig = {
   measurementId: "G-Q42F68K3DQ"
 };
 
-let firebaseApp = firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const provider = new GoogleAuthProvider();
+const db = getDatabase(app);
+const refDB = ref
+// provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
-let Auth = firebaseApp.auth();
+const auth = getAuth(app);
+// auth.languageCode = 'it';
 //let Db = firebaseApp.database();
 //let Funt = firebaseApp.functions();
 // let Storage = firebaseApp.storage();
 // let FireTime = firebase.database.ServerValue.TIMESTAMP;
-export { Auth };
+export {
+  auth,
+  provider,
+  signInWithPopup,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signOut,
+  db,
+  refDB,
+  set,
+  onValue,
+  child,
+  get,
+  update,
+  off,
+  remove
+};

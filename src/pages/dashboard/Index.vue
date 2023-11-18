@@ -1,7 +1,19 @@
-<q-page-container>
-  <q-page padding>
-    <p v-for="n in 15" :key="n">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit nihil praesentium molestias a adipisci, dolore vitae odit, quidem consequatur optio voluptates asperiores pariatur eos numquam rerum delectus commodi perferendis voluptate?
-    </p>
-  </q-page>
-</q-page-container>
+<template>
+  <q-page :style-fn="myTweak">...</q-page>
+</template>
+
+<script>
+export default {
+  // ...
+  methods: {
+    myTweak (offset) {
+      // "offset" is a Number (pixels) that refers to the total
+      // height of header + footer that occupies on screen,
+      // based on the QLayout "view" prop configuration
+
+      // this is actually what the default style-fn does in Quasar
+      return { minHeight: offset ? `calc(100vh - ${offset}px)` : '100vh' }
+    }
+  }
+}
+</script>

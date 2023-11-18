@@ -6,44 +6,31 @@
         <q-toolbar-title>
           DHealthTech
         </q-toolbar-title>
-
         <div>
           <q-btn
             no-caps
             rounded
             outline
             class="btn-fixed-width full-width q-ma-sm"
+            @click="redirectToDashboardOrLogin()"
           >
-          <div> Login </div>
+          <q-tooltip v-if="userInfo.photoURL" >
+            Cuenta
+            <br />
+            {{ userInfo.displayName }}
+            <br />
+            {{ userInfo.email }}
+          </q-tooltip>
+          <div v-if="userInfo.photoURL"> Dashboard </div>
+          <div v-else> Login </div>
             <q-avatar size="22px" class="q-ml-sm">
-              <img src="https://www.gstatic.com/images/branding/product/1x/googleg_96dp.png" />
+              <img v-if="userInfo.photoURL" :src="userInfo.photoURL"/>
+              <img v-else src="https://www.gstatic.com/images/branding/product/1x/googleg_96dp.png" />
             </q-avatar>
           </q-btn>
         </div>
       </q-toolbar>
-
     </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -51,67 +38,77 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useQuasar } from 'quasar'
+import { auth, provider, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, db, refDB, set, child, get } from "boot/firebase";
+import { useStore } from 'stores/store'
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
 
 export default defineComponent({
   name: 'MainLayout',
 
-  components: {
-    EssentialLink
-  },
+  components: {},
 
   setup () {
+    const store = useStore()
     const leftDrawerOpen = ref(false)
+    const $q = useQuasar()
+    let userInfo = ref({})
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        userInfo.value = user
+      } else {
+      }
+    });
+
+    function redirectToDashboardOrLogin() {
+      if (userInfo.value.photoURL) {
+        this.$router.push("dashboard");
+      }else{
+        this.loginGoogle()
+      }
+    }
+
+    function loginGoogle(params) {
+      signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log(result)
+        this.$router.push("dashboard");
+        setUserDB(result.user)
+      }).catch((error) => {
+        console.log('error => ', error)
+      });
+    }
+
+    function setUserDB(params) {
+      console.log('setUserDB params => ', params)
+      const userId = params.uid
+      store.userUID = userId
+      $q.localStorage.set('userUID', userId)
+      const dbRef = refDB(db);
+      const { displayName, email } = params
+      get(child(dbRef, `users/${userId}`)).then((snapshot) => {
+        if (snapshot.exists()) {
+          console.log(snapshot.val());
+        } else {
+          console.log("No data available");
+          set(refDB(db, `users/${userId}/info`), {
+            username: displayName,
+            email: email
+          });
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+
+    }
 
     return {
-      essentialLinks: linksList,
+      userInfo,
       leftDrawerOpen,
+      loginGoogle,
+      redirectToDashboardOrLogin,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       }

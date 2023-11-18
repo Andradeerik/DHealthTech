@@ -14,7 +14,58 @@ const routes = [
       aut: true
     },
     children: [
-      { path: "", component: () => import("pages/dashboard/Index.vue") }
+      { path: "", component: () => import("pages/dashboard/Index.vue") },
+      { path: "/dashboard/patients", component: () => import("pages/dashboard/Patients.vue") }
+    ]
+  },
+  {
+    path: "/scans/:patientId",
+    component: () => import("layouts/Scans.vue"),
+    meta: {
+      aut: true
+    },
+    children: [
+      {
+        path: "total",
+        component: () => import("pages/scans/TotalScan.vue")
+      },
+      {
+        path: "cervical",
+        component: () => import("pages/scans/CervicalScan.vue")
+      },
+      {
+        path: "lumbar",
+        component: () => import("pages/scans/LumbarScan.vue")
+      },
+      {
+        path: "fosas",
+        component: () => import("pages/scans/FosasScan.vue")
+      }
+    ]
+  },
+  {
+    path: "/new-scans/:patientId",
+    component: () => import("layouts/NewScans.vue"),
+    meta: {
+      aut: true
+    },
+    children: [
+      {
+        path: "total",
+        component: () => import("pages/newscans/NewTotalScan.vue")
+      },
+      {
+        path: "cervical",
+        component: () => import("pages/newscans/NewCervicalScan.vue")
+      },
+      {
+        path: "lumbar",
+        component: () => import("pages/newscans/NewLumbarScan.vue")
+      },
+      // {
+      //   path: "fosas",
+      //   component: () => import("pages/newcans/NewFosasScan.vue")
+      // }
     ]
   },
   // Always leave this as last one,
