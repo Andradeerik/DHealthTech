@@ -68,6 +68,11 @@ const routes = [
       // }
     ]
   },
+  {
+    // ejemplo: '/edit-scans/1699833811059/1699145428677/total/post',
+    path: '/edit-scans/:idScan/:patientId/:typeScan/:type',
+    component: () => import('layouts/EditScans.vue'),
+  },
   // Always leave this as last one,
   // but you can also remove it
   {
