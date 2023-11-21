@@ -3,7 +3,7 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main # o la rama que prefieras
+      - main
 
 jobs:
   build:
@@ -17,10 +17,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 14
-      - name: Authenticate with npm
-        run: echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > ~/.npmrc
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}  # Agrega este secreto en la configuración de tu repositorio
 
       - name: Install Quasar CLI
         run: |
@@ -39,11 +35,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - run: npm i && quasar build -m pwa
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DHEALTHTECH }}'
-          expires: 30d
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DHEALTHTECH }}
           projectId: dhealthtech
+          expires: 30d
