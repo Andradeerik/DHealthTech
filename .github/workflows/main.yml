@@ -29,15 +29,7 @@ jobs:
       - name: Build Quasar App
         run: |
           quasar build -m pwa
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
+      
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -45,3 +37,4 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DHEALTHTECH }}
           projectId: dhealthtech
           expires: 30d
+          channelId: live
