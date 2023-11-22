@@ -1,8 +1,15 @@
 <template>
   <q-page>
+    <template v-if="!patients">
+        <h6>
+          No hay pacientes registrados. Haz clic en el botón <q-btn round color="secondary" icon="add" size="xs" />  para agregar uno.
+        </h6>
+        <img style="height: 100%; max-width: 100%" src="/img/undraw_add_friends_re_3xte.svg" alt="Undraw Add Friends" />
+      </template>
 
-    <q-list class="rounded-borders">
+    <q-list v-else class="rounded-borders">
       <q-item-label header>Pasientes</q-item-label>
+
       <template v-for="(patient, i) in patients" :key="i" >
         <q-item clickable v-ripple @click="slectedPatiente(patient, i)">
           <q-item-section avatar>
@@ -59,7 +66,7 @@ export default {
     const dialogUserForm = ref(false)
     const localStorageUserUID = $q.localStorage.getItem('userUID')
     const patientsPath = `users/${localStorageUserUID}/patients`
-    const patients = ref({})
+    const patients = ref(null)
     const infoPatienteSelecte = reactive({})
     const dialogCarduser = ref(false)
 
@@ -76,15 +83,18 @@ export default {
     };
 
     const getuserDB = () => {
+      // patients.value = null
       const dbRef = refDB(db);
       get(child(dbRef, `${patientsPath}`)).then((snapshot) => {
         if (snapshot.exists()) {
           patients.value = snapshot.val()
         } else {
           console.log("No data available");
+          patients.value = null
         }
       }).catch((error) => {
         console.error(error);
+        patients.value = null
       });
     }
 

@@ -22,7 +22,8 @@
 						<div class="hero-copy">
                         <h1 class="hero-title mt-0">Explorando la Columna Vertebral con Tecnología </h1>
                         <p class="hero-paragraph">DHealthTech y su escáner térmico de última generación con tecnología infrarroja, diseñado para detectar anomalías en cada vértebra. Descubre la innovación.</p>
-                        <div class="hero-cta"><a class="button button-primary" href="#">Pre order now</a><a class="button" href="#">Get in touch</a></div>
+                        <div class="hero-cta"><a class="button button-primary" href="https://mpago.la/2fftqg7">Pre-ordenar Ahora</a><a href="https://wa.me/525577803079?text=Estoy%20interesado%20en%20el%20escáner.%20Quisiera%20más%20información." target="_blank" class="button">Contáctanos</a>
+</div>
 						</div>
 						<div class="hero-figure anime-element">
 							<svg class="placeholder" width="528" height="396" viewBox="0 0 528 396">
@@ -143,7 +144,7 @@
                                         </ul>
                                     </div>
                                     <div class="pricing-table-cta mb-8">
-                                        <a class="button button-primary button-shadow button-block" href="#">Pre order now</a>
+                                        <a class="button button-primary button-shadow button-block" href="https://mpago.la/2fftqg7">Pre-ordenar Ahora</a>
                                     </div>
                                 </div>
                             </div>

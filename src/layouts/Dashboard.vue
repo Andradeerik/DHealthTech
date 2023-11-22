@@ -26,7 +26,7 @@
           </template>
         </q-input> -->
 
-        <q-btn v-if="$q.screen.gt.xs" flat dense no-wrap color="primary" icon="add" no-caps label="Create" class="q-ml-sm q-px-md">
+        <!-- <q-btn v-if="$q.screen.gt.xs" flat dense no-wrap color="primary" icon="add" no-caps label="Create" class="q-ml-sm q-px-md">
           <q-menu anchor="top end" self="top end">
             <q-list class="text-grey-8" style="min-width: 100px">
               <q-item aria-hidden="true">
@@ -40,9 +40,9 @@
               </q-item>
             </q-list>
           </q-menu>
-        </q-btn>
+        </q-btn> -->
 
-        <q-btn v-if="$q.screen.gt.xs" flat dense no-wrap color="primary" icon="cloud_upload" no-caps label="Upload" class="q-ml-sm q-px-md" />
+        <!-- <q-btn v-if="$q.screen.gt.xs" flat dense no-wrap color="primary" icon="cloud_upload" no-caps label="Upload" class="q-ml-sm q-px-md" /> -->
 
         <q-space />
 
@@ -102,13 +102,13 @@
       </q-toolbar>
     </q-header>
 
-    <q-footer reveal elevated bordered class="bg-white text-primary">
+    <q-footer v-if="!$q.screen.gt.sm" reveal elevated bordered class="bg-white text-primary">
         <q-tabs no-caps active-color="primary" indicator-color="transparent" class="text-grey-8">
-          <q-route-tab
+          <!-- <q-route-tab
             icon="home"
             to="/dashboard"
             exact
-          />
+          /> -->
           <q-route-tab
             icon="contact_mail"
             to="/dashboard/patients"
@@ -179,19 +179,19 @@
       </q-scroll-area>
     </q-drawer>
 
-    <q-page-container >
+    <q-page-container class="GPL__page-container">
       <q-page class="q-pa-md">
         <router-view />
       </q-page>
 
       <q-page-sticky v-if="$q.screen.gt.sm" expand position="left">
         <div class="fit q-pt-xl q-px-sm column">
-          <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
-            <q-icon size="22px" name="photo" />
-            <div class="GPL__side-btn__label">Photos</div>
+          <q-btn exact to="/dashboard/patients" round flat color="primary" stack no-caps size="26px" class="GPL__side-btn">
+            <q-icon size="22px" name="contact_mail" />
+            <div class="GPL__side-btn__label">Pasientes</div>
           </q-btn>
 
-          <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
+          <!-- <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
             <q-icon size="22px" name="collections_bookmark" />
             <div class="GPL__side-btn__label">Albums</div>
           </q-btn>
@@ -212,7 +212,7 @@
           <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
             <q-icon size="22px" name="import_contacts" />
             <div class="GPL__side-btn__label">Photo books</div>
-          </q-btn>
+          </q-btn> -->
         </div>
       </q-page-sticky>
 

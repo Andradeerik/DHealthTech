@@ -35,7 +35,7 @@
         </q-toolbar>
       </q-header>
 
-      <q-footer reveal elevated bordered class="bg-white text-primary">
+      <q-footer v-if="!$q.screen.gt.sm" reveal elevated bordered class="bg-white text-primary">
           <q-tabs no-caps active-color="primary" indicator-color="transparent" class="text-grey-8">
             <q-route-tab
             label="Total"
@@ -69,33 +69,33 @@
 
         <q-page-sticky v-if="$q.screen.gt.sm" expand position="left">
           <div class="fit q-pt-xl q-px-sm column">
-            <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
-              <q-icon size="22px" name="photo" />
-              <div class="GPL__side-btn__label">Photos</div>
+            <q-btn :to="'/scans/' + $route.params.patientId + '/total'" round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
+              <q-icon size="22px" name="fa-solid fa-user" />
+              <div class="GPL__side-btn__label">Total</div>
+            </q-btn>
+
+            <q-btn :to="'/scans/' + $route.params.patientId + '/cervical'" round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
+              <q-icon size="22px" name="fa-solid fa-chevron-up" />
+              <div class="GPL__side-btn__label">Cervical</div>
             </q-btn>
 
             <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
-              <q-icon size="22px" name="collections_bookmark" />
-              <div class="GPL__side-btn__label">Albums</div>
-            </q-btn>
-
-            <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
-              <q-icon size="22px" name="assistant" />
-              <div class="GPL__side-btn__label">Assistant</div>
-              <q-badge floating color="red" text-color="white" style="top: 8px; right: 16px">
+              <q-icon size="22px" name="fa-solid fa-chevron-down" />
+              <div class="GPL__side-btn__label">Lumbar</div>
+              <!-- <q-badge floating color="red" text-color="white" style="top: 8px; right: 16px">
                 1
-              </q-badge>
+              </q-badge> -->
             </q-btn>
 
             <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
-              <q-icon size="22px" name="group" />
-              <div class="GPL__side-btn__label">Sharing</div>
+              <q-icon size="22px" name="fa-solid fa-columns" />
+              <div class="GPL__side-btn__label">Fosas</div>
             </q-btn>
 
-            <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
+            <!-- <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
               <q-icon size="22px" name="import_contacts" />
               <div class="GPL__side-btn__label">Photo books</div>
-            </q-btn>
+            </q-btn> -->
           </div>
         </q-page-sticky>
 

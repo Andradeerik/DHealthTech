@@ -64,7 +64,8 @@ export default defineComponent({
 
     function redirectToDashboardOrLogin() {
       if (userInfo.value.photoURL) {
-        this.$router.push("dashboard");
+        // this.$router.push("dashboard");
+        this.$router.push('/dashboard/patients')
       }else{
         this.loginGoogle()
       }
@@ -74,7 +75,8 @@ export default defineComponent({
       signInWithPopup(auth, provider)
       .then((result) => {
         console.log(result)
-        this.$router.push("dashboard");
+        // this.$router.push("dashboard");
+        this.$router.push('/dashboard/patients')
         setUserDB(result.user)
       }).catch((error) => {
         console.log('error => ', error)
