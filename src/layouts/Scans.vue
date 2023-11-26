@@ -12,8 +12,12 @@
                     <img src="https://cdn.quasar.dev/img/boy-avatar.png">
                 </q-avatar>
                 <div class="ellipsis">
-                    Erik daniel andrade peralrta
-                    <q-tooltip>cookiesLabel</q-tooltip>
+                    {{infoPatienteSelecte.name}}
+                    <q-tooltip>
+                      Correo electronico: {{infoPatienteSelecte.email}}
+                      <br>
+                      Fecha de nacimiento: {{infoPatienteSelecte.dateOfBirth}}
+                    </q-tooltip>
                 </div>
             </q-chip>
         </div>
@@ -42,7 +46,7 @@
             :to="'/scans/' + $route.params.patientId + '/total'"
               exact
             />
-            <q-route-tab
+            <!-- <q-route-tab
             label="Cervical"
             :to="'/scans/' + $route.params.patientId + '/cervical'"
               exact
@@ -57,12 +61,12 @@
             label="Fosas"
             :to="'/scans/' + $route.params.patientId + '/fosas'"
               exact
-            />
+            /> -->
           </q-tabs>
         </q-footer>
 
 
-      <q-page-container >
+      <q-page-container class="GPL__page-container">
         <q-page class="q-pa-md">
           <router-view />
         </q-page>
@@ -74,23 +78,23 @@
               <div class="GPL__side-btn__label">Total</div>
             </q-btn>
 
-            <q-btn :to="'/scans/' + $route.params.patientId + '/cervical'" round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
+            <!-- <q-btn :to="'/scans/' + $route.params.patientId + '/cervical'" round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
               <q-icon size="22px" name="fa-solid fa-chevron-up" />
               <div class="GPL__side-btn__label">Cervical</div>
             </q-btn>
 
             <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
               <q-icon size="22px" name="fa-solid fa-chevron-down" />
-              <div class="GPL__side-btn__label">Lumbar</div>
+              <div class="GPL__side-btn__label">Lumbar</div> -->
               <!-- <q-badge floating color="red" text-color="white" style="top: 8px; right: 16px">
                 1
               </q-badge> -->
-            </q-btn>
+            <!-- </q-btn> -->
 
-            <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
+            <!-- <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
               <q-icon size="22px" name="fa-solid fa-columns" />
               <div class="GPL__side-btn__label">Fosas</div>
-            </q-btn>
+            </q-btn> -->
 
             <!-- <q-btn round flat color="grey-8" stack no-caps size="26px" class="GPL__side-btn">
               <q-icon size="22px" name="import_contacts" />
@@ -106,19 +110,89 @@
   </template>
 
   <script>
-  import { ref } from 'vue'
+  import { ref, onMounted } from 'vue'
+  import { auth, provider, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, db, refDB, set, child, get, update, onValue, off, remove } from "boot/firebase";
+  import { useRouter } from 'vue-router'
+  import { useQuasar } from 'quasar'
 
   export default {
     name: 'Scans',
     setup () {
+      const infoPatienteSelecte = ref({
+        name: '',
+        email: '',
+        dateOfBirth: ''
+      })
+      const $q = useQuasar()
+      const localStorageUserUID = $q.localStorage.getItem('userUID')
+      const patientIdURL = ref(null)
+      const router = useRouter()
+      patientIdURL.value = router.currentRoute.value.params.patientId
 
+      const getPatieInfo = () => {
+        get(child(refDB(db), `users/${localStorageUserUID}/patients/${patientIdURL.value}/info`)).then((snapshot) => {
+          if (snapshot.exists()) {
+            console.log('snap => ', snapshot.val());
+            infoPatienteSelecte.value = snapshot.val()
+          } else {
+            console.log("No data available");
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
+      onMounted(() => {
+        // obtenerPatientId()
+        getPatieInfo()
+      })
       return {
+        infoPatienteSelecte
       }
 
     }
   }
   </script>
 
-  <style>
+<style lang="sass">
+.GPL
 
-  </style>
+  &__toolbar
+    height: 64px
+
+  &__toolbar-input
+    width: 35%
+
+  &__drawer-item
+    line-height: 24px
+    border-radius: 0 24px 24px 0
+    margin-right: 12px
+
+    .q-item__section--avatar
+      padding-left: 12px
+      .q-icon
+        color: #5f6368
+
+    .q-item__label:not(.q-item__label--caption)
+      color: #3c4043
+      letter-spacing: .01785714em
+      font-size: .875rem
+      font-weight: 500
+      line-height: 1.25rem
+
+    &--storage
+      border-radius: 0
+      margin-right: 0
+      padding-top: 24px
+      padding-bottom: 24px
+
+  &__side-btn
+    &__label
+      font-size: 12px
+      line-height: 24px
+      letter-spacing: .01785714em
+      font-weight: 500
+
+  @media (min-width: 1024px)
+    &__page-container
+      padding-left: 94px
+</style>
