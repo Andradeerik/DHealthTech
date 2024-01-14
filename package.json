@@ -2,7 +2,7 @@
   "name": "dhealthtech",
   "version": "0.0.1",
   "description": "A Quasar Project",
-  "productName": "Quasar App",
+  "productName": "dhealthtech",
   "author": "dani.erik18ap@gmail.com",
   "private": true,
   "scripts": {

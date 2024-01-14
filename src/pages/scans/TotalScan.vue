@@ -13,6 +13,7 @@
         :index="index"
         :key="index"
         :patientIdURL="patientIdURL"
+        @deleteScan="deleteScan"
       />
       </q-intersection>
         </template>
@@ -64,6 +65,29 @@
       const obtenerPatientId = () => {
         patientIdURL.value = router.currentRoute.value.params.patientId
       }
+      const deleteScan = (payload) => {
+        console.log('se va a eliminar algunascaneo ');
+        console.log(payload);
+        const type = payload.type === 'all' ? '' : payload.type
+        remove(child(refDB(db), `users/${localStorageUserUID}/patients/${patientIdURL.value}/scans/total/${payload.index}/${type}`))
+        .then(() => {
+          console.log("Remove succeeded.")
+          $q.notify({
+            color: 'positive',
+            position: 'center',
+            message: 'Scan deleted'
+          })
+        })
+        .catch((error) => {
+          console.log("Remove failed: " + error.message)
+          $q.notify({
+            color: 'negative',
+            position: 'center',
+            message: 'Error deleting scan'
+          })
+        });
+        getScansDB()
+      }
       onMounted(() => {
         obtenerPatientId()
         getScansDB()
@@ -71,7 +95,8 @@
       return {
         fullscreen,
         scans,
-        patientIdURL
+        patientIdURL,
+        deleteScan
       }
     }
   }
