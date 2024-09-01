@@ -73,6 +73,10 @@ const routes = [
     path: '/edit-scans/:idScan/:patientId/:typeScan/:type',
     component: () => import('layouts/EditScans.vue'),
   },
+  {
+    path: '/view-scans/:idScan/:patientId/:typeScan/:type',
+    component: () => import('layouts/ViewScans.vue'),
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

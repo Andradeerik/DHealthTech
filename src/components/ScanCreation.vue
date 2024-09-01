@@ -46,11 +46,17 @@
         </div>
       </template>
       <template v-if="scanningComplete">
-        <graph
+        <!-- <graph
           :data="dataForGraph"
           :btn="true"
           :mm="mmScanning"
           @guardar="savedScans"
+        /> -->
+        <spineThermography
+        :data="dataForGraph"
+        :btn="true"
+        :mm="mmScanning"
+        @saveScan="savedScans"
         />
       </template>
     </template>
@@ -60,6 +66,7 @@
 import { ref, onMounted } from "vue";
 import { useQuasar } from 'quasar'
 import graph from "components/ScannerGraphs.vue";
+import spineThermography from "components/SpineThermography.vue";
 import { useRouter } from 'vue-router'
 import { auth, provider, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, db, refDB, set, child, get, update, onValue, off, remove } from "boot/firebase";
 
@@ -213,7 +220,7 @@ const dataSimulate = [
 
 export default {
   name: "NewTotalScan",
-  components: { graph },
+  components: { graph, spineThermography },
   props: {
     idScan: {
       type: String,

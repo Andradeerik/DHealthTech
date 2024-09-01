@@ -22,7 +22,7 @@
         <q-space />
 
           <q-toolbar-title shrink class="row items-center no-wrap">
-            <span class="q-ml-sm">nuevo scan-{{ dynamicSegment }}</span>
+            <span class="q-ml-sm">Nuevo Escaneo-{{ dynamicSegment }}</span>
           </q-toolbar-title>
 
           <q-space />

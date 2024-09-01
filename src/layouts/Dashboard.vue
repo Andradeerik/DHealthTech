@@ -87,7 +87,7 @@
                 <q-btn
                   class="q-my-md"
                   color="primary"
-                  label="Logout"
+                  label="Cerrar sesión"
                   push
                   size="sm"
                   @click="logout()"

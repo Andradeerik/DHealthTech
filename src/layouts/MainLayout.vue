@@ -21,8 +21,8 @@
             <br />
             {{ userInfo.email }}
           </q-tooltip>
-          <div v-if="userInfo.photoURL"> Dashboard </div>
-          <div v-else> Login </div>
+          <div v-if="userInfo.photoURL">Mi cuenta</div>
+          <div v-else> Iniciar sesión </div>
             <q-avatar size="22px" class="q-ml-sm">
               <img v-if="userInfo.photoURL" :src="userInfo.photoURL"/>
               <img v-else src="https://www.gstatic.com/images/branding/product/1x/googleg_96dp.png" />

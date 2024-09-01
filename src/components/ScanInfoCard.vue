@@ -14,6 +14,7 @@
               no-caps
               label="Pre"
               :disable="!item.pre || item.pre === 'delet'"
+              :to="`/view-scans/${index}/${patientIdURL}/total/pre`"
             >
               <q-tooltip>full Pre</q-tooltip>
             </q-btn>
@@ -33,6 +34,7 @@
               no-caps
               label="Post"
               :disable="!item.post || item.post === 'delet'"
+              :to="`/view-scans/${index}/${patientIdURL}/total/post`"
             >
               <q-tooltip>full Post</q-tooltip>
             </q-btn>
@@ -48,7 +50,8 @@
       color="white"
       text-color="primary"
       :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
-      disable
+      :disable="!item.pre || !item.post"
+      :to="`/view-scans/${index}/${patientIdURL}/total/compare`"
     >
       <q-tooltip
         content-class="bg-purple"
@@ -67,10 +70,13 @@
       <q-fab-action
         color="positive"
         icon="edit"
+        :to="`/edit-scans/${index}/${patientIdURL}/total/pre`"
       />
       <q-fab-action
         color="negative"
         icon="delete_sweep"
+        :disable="!item.pre || item.pre === 'delet'"
+        @click="deleteScan(item, index, 'pre')"
       />
     </q-fab>
     <q-fab
@@ -88,6 +94,8 @@
       <q-fab-action
         color="negative"
         icon="delete_sweep"
+        :disable="!item.post || item.post === 'delet'"
+        @click="deleteScan(item, index, 'post')"
       />
     </q-fab>
     <div class="row items-start text-center positfech">
@@ -150,6 +158,7 @@
       dense
       color="negative"
       icon="delete_forever"
+      @click="deleteScan(item, index, 'all')"
     >
       <q-tooltip
         anchor="top middle"
@@ -165,6 +174,7 @@
 <script>
 import { ref, onMounted, onBeforeUnmount, reactive, computed  } from 'vue'
 import { date } from 'quasar'
+import { useQuasar } from 'quasar'
 export default {
   name: 'ScanInfoCard',
   props: {
@@ -181,7 +191,8 @@ export default {
       required: true
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
+    const $q = useQuasar()
     const fullscreen = ref(false)
 
     const formatDateForDisplay = (item) => {
@@ -191,27 +202,54 @@ export default {
       return date.formatDate(item, "hh:mm aa");
     }
 
+    const deleteScan = (item, index, type) => {
+      console.log(item)
+      console.log(index)
+      console.log(type)
+      $q.dialog({
+          title: 'Confirmación de Eliminación',
+          message: '¿Estás seguro de que deseas eliminar este Escaneo? Esta acción no se puede deshacer y todos los datos relacionados con el Escaneo se perderán de forma permanente.',
+          ok: {
+            push: true,
+            color: 'negative'
+          },
+          cancel: {
+            push: true,
+          },
+          style: 'border-radius: 20px; background-color: #ffffcc;',
+          persistent: true
+        }).onOk(() => {
+          const data = {
+            item,
+            index,
+            type
+          }
+          emit("deleteScan", data);
+
+        })
+    }
     console.log(props.item)
     console.log(props.index)
     return {
       fullscreen,
       formatDateForDisplay,
       formatTimeForDisplay,
+      deleteScan
     }
   }
 
 }
 </script>
 
-<style>
+<style scoped>
 .example-item {
   height: 360px;
   width: 290px;
 }
 .full {
-  display: flex;
-  margin-left: auto;
-  margin-right: auto;
+  display:flex;
+  margin-left: 38%;
+  margin-right: 50%;
   top: -60px;
 }
 .posii {
@@ -224,7 +262,6 @@ export default {
   display: flex;
   margin-left: auto;
   margin-right: auto;
-  /* Puedes ajustar el margen superior según sea necesario */
   margin-top: -40px;
 }
 .delet .q-btn__content {
