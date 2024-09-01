@@ -28,7 +28,7 @@
             </q-chip> -->
 
           <q-toolbar-title shrink class="row items-center no-wrap">
-            <span class="q-ml-sm">Escanneos</span>
+            <span class="q-ml-sm">Escaneos</span>
           </q-toolbar-title>
 
           <q-space />

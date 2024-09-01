@@ -2,7 +2,7 @@
   <q-page>
     <template v-if="!patients">
         <h6>
-          No hay pacientes registrados. Haz clic en el botón <q-btn round color="secondary" icon="add" size="xs" />  para agregar uno.
+          No hay pacientes registrados. Haz clic en el botón <q-btn @click="dialogUserForm = true" round color="secondary" icon="add" size="xs" />  para agregar uno.
         </h6>
         <img style="height: 100%; max-width: 100%" src="/img/undraw_add_friends_re_3xte.svg" alt="Undraw Add Friends" />
       </template>

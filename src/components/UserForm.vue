@@ -51,8 +51,8 @@
               type="email"
             />
             <div>
-              <q-btn label="Submit" type="submit" color="primary" push />
-              <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+              <q-btn label="Guardar" type="submit" color="primary" push />
+              <q-btn label="Limpiar Formulario" type="reset" color="primary" flat class="q-ml-sm" />
             </div>
           </q-form>
         </q-card-section>

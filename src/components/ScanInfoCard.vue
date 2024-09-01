@@ -262,7 +262,6 @@ export default {
   display: flex;
   margin-left: auto;
   margin-right: auto;
-  /* Puedes ajustar el margen superior según sea necesario */
   margin-top: -40px;
 }
 .delet .q-btn__content {

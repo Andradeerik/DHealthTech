@@ -37,7 +37,7 @@
             </q-item> -->
             <q-item >
               <q-item-section>
-                <q-btn push color="primary" label="Escanneos" :to="`/scans/${infoPatienteSelecte.value.key}/total`"/>
+                <q-btn push color="primary" label="Escaneos" :to="`/scans/${infoPatienteSelecte.value.key}/total`"/>
               </q-item-section>
             </q-item>
           </q-list>
