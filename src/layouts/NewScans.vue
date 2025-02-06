@@ -13,8 +13,12 @@
                     <img src="https://cdn.quasar.dev/img/boy-avatar.png">
                 </q-avatar>
                 <div class="ellipsis">
-                    Erik daniel andrade peralrta
-                    <q-tooltip>cookiesLabel</q-tooltip>
+                  {{infoPatienteSelecte.name}}
+                  <q-tooltip>
+                      Correo electronico: {{infoPatienteSelecte.email}}
+                      <br>
+                      Fecha de nacimiento: {{infoPatienteSelecte.dateOfBirth}}
+                    </q-tooltip>
                 </div>
             </q-chip>
         </div>
@@ -76,24 +80,55 @@
   </template>
 
   <script>
-  import { computed, ref, onBeforeMount } from 'vue';
+  import { computed, ref, onBeforeMount, onMounted } from 'vue';
+  import { auth, provider, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, db, refDB, set, child, get, update, onValue, off, remove } from "boot/firebase";
+  import { useRouter } from 'vue-router'
+  import { useQuasar } from 'quasar'
 
   export default {
     name: 'NewScans',
     setup () {
+      const $q = useQuasar()
       const dynamicSegment = ref('');
       const setDynamicSegment = () => {
       const segments = window.location.pathname.split('/');
       dynamicSegment.value = segments[segments.length - 1];
     };
 
+    const infoPatienteSelecte = ref({
+        name: '',
+        email: '',
+        dateOfBirth: ''
+      })
+
+    const localStorageUserUID = $q.localStorage.getItem('userUID')
+    const patientIdURL = ref(null)
+    const router = useRouter()
+    patientIdURL.value = router.currentRoute.value.params.patientId
+
+    const getPatieInfo = () => {
+      get(child(refDB(db), `users/${localStorageUserUID}/patients/${patientIdURL.value}/info`)).then((snapshot) => {
+        if (snapshot.exists()) {
+          console.log('snap => ', snapshot.val());
+          infoPatienteSelecte.value = snapshot.val()
+
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+    }
+
     onBeforeMount(() => {
+      getPatieInfo()
       setDynamicSegment();
     });
     function goBack() {
         window.history.back();
     }
       return {
+        infoPatienteSelecte,
         goBack,
         dynamicSegment: computed(() => dynamicSegment.value),
       }

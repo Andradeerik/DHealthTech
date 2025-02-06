@@ -8,7 +8,7 @@
         Todavía no tienes un escáner registrado en tu cuenta. ¿Deseas registrar
         uno ahora?
         <template v-slot:action>
-          <q-btn push color="light-green-3" label="Registrar Escáner" />
+          <q-btn push color="light-green-3" label="Registrar Escáner" @click="registerScann()" />
           <q-btn
             push
             color="light-blue-3"
@@ -266,6 +266,73 @@ export default {
     dataForGraph.value = [];
   };
 
+  function registerScann () {
+    console.log("registerScann");
+    $q.dialog({
+        title: 'Asociar Scanner a Cuenta',
+        message: 'Introduce el ID del scanner:',
+        prompt: {
+          model: '',
+          type: 'number'
+        },
+        cancel: true,
+        persistent: true
+      }).onOk(data => {
+        console.log('>>>> OK, received', data)
+        const scanID = data
+        const userUID = $q.localStorage.getItem('userUID')
+        console.log(userUID)
+        const pathScan = `gadgets/scanners/${scanID}`
+        console.log(pathScan)
+        get(refDB(db, pathScan)).then((snapshot)=>{
+          if (snapshot.exists()) {
+            const scannerData = snapshot.val()
+            console.log(scannerData)
+            const pathUser = `users/${userUID}/scanners`
+            console.log(pathUser)
+            if(snapshot.val().userUID){
+              $q.notify({
+                position:'center',
+                type: 'negative',
+                message: 'El escáner ya está asociado a otra cuenta.'
+              })
+              return
+            }
+
+            update(refDB(db, pathUser), {
+              scanID: scanID
+            }).then(() => {
+              update(refDB(db, pathScan), {
+                userUID: userUID
+              }).then(() => {
+                $q.notify({
+                  position:'center',
+                  type: 'positive',
+                  message: 'Escáner asociado exitosamente.'
+                })
+                showScannerStatusBanner.value = false;
+              })
+
+            })
+            .catch((error) => {
+              // The write failed...
+            });
+          } else {
+            $q.notify({
+              position:'center',
+              type: 'negative',
+              message: 'El escáner no existe.'
+            })
+          }
+        })
+
+      }).onCancel(() => {
+        console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        console.log('I am triggered on both OK and Cancel')
+      })
+  };
+
     const simulateScanning = () => {
       showScannerStatusBanner.value = false;
       setTimeout(() => {
@@ -324,8 +391,24 @@ export default {
       patientIdURL.value = patientId
     }
 
+    function getShowScannerStatusBanner() {
+      const userUID = $q.localStorage.getItem('userUID')
+      const path = `users/${userUID}/scanners`
+      get(refDB(db, path)).then((snapshot) => {
+        if (snapshot.exists()) {
+          showScannerStatusBanner.value = false;
+        } else {
+          showScannerStatusBanner.value = true;
+        }
+      }).catch((error) => {
+        console.error(error);
+        showScannerStatusBanner.value = true;
+      });
+    }
+
     onMounted(() => {
       obtenerPatientId()
+      getShowScannerStatusBanner()
     })
 
     return {
@@ -336,6 +419,7 @@ export default {
       dataForGraph,
       simulateScanning,
       savedScans,
+      registerScann,
     };
   },
 };

@@ -67,6 +67,12 @@ module.exports = configure(function (/* ctx */) {
       // distDir
 
       // extendViteConf (viteConf) {},
+      extendViteConf(viteConf) {
+        viteConf.resolve.alias = {
+          ...viteConf.resolve.alias,
+          mqtt: 'mqtt/dist/mqtt.js',
+        };
+    },
       // viteVuePluginOptions: {},
 
 

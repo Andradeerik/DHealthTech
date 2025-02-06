@@ -1,7 +1,7 @@
 <template>
   <model-viewer
     style="width: 100%; height: 100vh"
-    src="/src/assets/ColumnaVertebral.glb"
+    src="/ColumnaVertebral.gltf"
     camera-orbit="89.41deg 61.95deg 10m"
     camera-controls
   >

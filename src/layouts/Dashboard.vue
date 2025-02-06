@@ -180,9 +180,20 @@
     </q-drawer>
 
     <q-page-container class="GPL__page-container">
+
       <q-page class="q-pa-md">
+
+      <!-- <div>
+    <q-btn label="Conectar" @click="connectToDevice" />
+    <q-input v-model="messageToSend" label="Mensaje a enviar" />
+    <q-btn label="Enviar" @click="sendMessage" />
+    <div v-if="deviceConnected">
+      Mensaje recibido: {{ receivedMessage }}
+    </div>
+  </div> -->
         <router-view />
       </q-page>
+
 
       <q-page-sticky v-if="$q.screen.gt.sm" expand position="left">
         <div class="fit q-pt-xl q-px-sm column">
@@ -233,6 +244,12 @@ export default {
     const storage = ref(0.26)
     const showing = ref(false)
 
+    const deviceConnected = ref(false);
+    const messageToSend = ref('');
+    const receivedMessage = ref('');
+    let characteristic;
+
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
         userInfo.value = user
@@ -252,7 +269,32 @@ export default {
       });
     }
 
+    async function connectToDevice() {
+      try {
+        const device = await navigator.bluetooth.requestDevice({
+          filters: [{ services: ['6e400001-b5a3-f393-e0a9-e50e24dcca9e'] }] // Asegúrate de que el UUID esté en minúsculas y en el formato correcto
+        });
+        // Conectar al dispositivo y manejar la conexión
+      } catch (error) {
+        console.error('Error al conectar:', error);
+      }
+    }
+
+    const sendMessage = async () => {
+      if (characteristic) {
+        await characteristic.writeValue(new TextEncoder().encode(messageToSend.value));
+      } else {
+        console.error('No hay conexión con el dispositivo');
+      }
+    };
+
+
     return {
+      deviceConnected,
+      messageToSend,
+      receivedMessage,
+      connectToDevice,
+      sendMessage,
       leftDrawerOpen,
       search,
       storage,
