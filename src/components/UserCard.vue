@@ -25,19 +25,9 @@
                 </q-item-label>
               </q-item-section>
             </q-item>
-
-            <!-- <q-item>
-              <q-item-section>
-                <q-item-label>Password</q-item-label>
-                <q-item-label caption>
-                  Require password for purchase or use
-                  password to restrict purchase
-                </q-item-label>
-              </q-item-section>
-            </q-item> -->
             <q-item >
               <q-item-section>
-                <q-btn push color="primary" label="Escaneos" :to="`/scans/${infoPatienteSelecte.value.key}/total`"/>
+                <q-btn push color="primary" label="Escaneos" :to="`/scans/${infoPatienteSelecte.value.key}/cervical`"/>
               </q-item-section>
             </q-item>
           </q-list>
@@ -46,7 +36,7 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn v-close-popup flat color="positive" round icon="edit" />
+          <q-btn v-close-popup flat color="positive" round icon="edit" @click="editUser()" />
           <q-btn flat color="negative" round icon="delete" @click="deleteUser()" />
         </q-card-actions>
       </q-card>
@@ -56,7 +46,7 @@ import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 
 export default {
-  name: 'UserCerd',
+  name: 'UserCard',
   props: {
     infoPatienteSelecte: Object
   },
@@ -64,9 +54,12 @@ export default {
     const $q = useQuasar()
     const data = props.infoPatienteSelecte.value.key
 
-    return {
-      deleteUser () {
-        $q.dialog({
+    function editUser(){
+      emit("editUser", data);
+    }
+
+    function deleteUser(){
+      $q.dialog({
           title: 'Confirmación de Eliminación',
           message: '¿Estás seguro de que deseas eliminar a este paciente? Esta acción no se puede deshacer y todos los datos relacionados con el paciente se perderán de forma permanente.',
           ok: {
@@ -79,11 +72,13 @@ export default {
           style: 'border-radius: 20px; background-color: #ffffcc;',
           persistent: true
         }).onOk(() => {
-          console.log('props dentro del hijo', props.infoPatienteSelecte.value.key)
-
           emit("deleteUser", data);
         })
-      },
+    }
+
+    return {
+      editUser,
+      deleteUser,
     }
   }
 }

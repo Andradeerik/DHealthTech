@@ -114,6 +114,11 @@
             to="/dashboard/patients"
             exact
           />
+          <!-- <q-route-tab
+            icon="widgets"
+            to="/dashboard/albums"
+            exact
+          /> -->
         </q-tabs>
       </q-footer>
 
@@ -331,6 +336,19 @@ export default {
   }
 }
 </script>
+
+<style>
+.custome {
+  display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 500px;
+      border: 1px solid #444;
+      border-radius: 12px;
+      background-color: #2e2e3e;
+      padding: 0.5rem;
+}
+</style>
 
 <style lang="sass">
 .GPL

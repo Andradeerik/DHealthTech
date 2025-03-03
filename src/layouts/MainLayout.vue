@@ -74,8 +74,6 @@ export default defineComponent({
     function loginGoogle(params) {
       signInWithPopup(auth, provider)
       .then((result) => {
-        console.log(result)
-        // this.$router.push("dashboard");
         this.$router.push('/dashboard/patients')
         setUserDB(result.user)
       }).catch((error) => {
@@ -84,7 +82,6 @@ export default defineComponent({
     }
 
     function setUserDB(params) {
-      console.log('setUserDB params => ', params)
       const userId = params.uid
       store.userUID = userId
       $q.localStorage.set('userUID', userId)
@@ -92,7 +89,7 @@ export default defineComponent({
       const { displayName, email } = params
       get(child(dbRef, `users/${userId}`)).then((snapshot) => {
         if (snapshot.exists()) {
-          console.log(snapshot.val());
+
         } else {
           console.log("No data available");
           set(refDB(db, `users/${userId}/info`), {
